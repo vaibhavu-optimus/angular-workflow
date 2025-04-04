@@ -1,4 +1,5 @@
 name: CD pipeline
+
 on:
   workflow_run:
     workflows: ["CI pipeline"]
@@ -7,12 +8,23 @@ on:
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
 
     steps:
-      - name: Download artifacts
+      - name: Checkout triggering workflow's repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.workflow_run.repository.full_name }}
+          ref: ${{ github.event.workflow_run.head_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download artifact from CI run
         uses: actions/download-artifact@v4
+        with:
+          name: app
+          path: artifactstaging
+          run-id: ${{ github.event.workflow_run.id }}
 
       - name: List files
         run: ls -R
