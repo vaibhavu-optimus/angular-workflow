@@ -12,10 +12,13 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
 
     steps:
-      - name: Download artifact from CI run
-        uses: actions/download-artifact@v4
+      - name: Download build artifact from triggered workflow
+        uses: dawidd6/action-download-artifact@v2
         with:
-          run-id: ${{ github.event.workflow_run.id }}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: app
+          path: ./app
+          search_artifacts: true
 
       - name: List files
         run: ls -R
