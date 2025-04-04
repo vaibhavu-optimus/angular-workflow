@@ -33,6 +33,3 @@ jobs:
         with:
           app-name: angular-app
           package: app
-
-
-          
