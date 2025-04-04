@@ -12,13 +12,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
 
     steps:
-      - name: Checkout triggering workflow's repo
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.workflow_run.repository.full_name }}
-          ref: ${{ github.event.workflow_run.head_branch }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Download artifact from CI run
         uses: actions/download-artifact@v4
         with:
